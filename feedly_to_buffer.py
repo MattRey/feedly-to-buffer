@@ -1,6 +1,12 @@
 import requests
 import json
 import re
+import random
+
+#Construct Key phrases from text file (assumes in same folder as .py file):
+key_phrases = open('keyphrase.txt')
+keylist = [i.strip() for i in key_phrases.readlines()]
+
 
 #FEEDLY REQUESTS:
 user_id = ##user-id (optional)
@@ -9,6 +15,7 @@ tags_url = 'https://cloud.feedly.com/v3/tags'
 streams_url = 'https://cloud.feedly.com/v3/streams/contents?streamId='
 markers_url = 'https://cloud.feedly.com/v3/markers'
 headers = {'Authorization': access_token}
+
 
 
 
@@ -39,7 +46,7 @@ def construct_articles():
         hashtag = item['tags'][0]['label']
         if item['unread'] == True:
             #ACTION TO PRODUCE ARTICLE STRUCTURE:
-            export_list.append({'title': item['title'], 'link': item['canonicalUrl'], 'content': (item['summary']['content']).rsplit('. ', 1)[0] + '. ' + '#' + hashtag, 'image': item['visual']['url'], 'id': item['id']})
+            export_list.append({'title': item['title'], 'link': item['canonicalUrl'], 'content': (item['summary']['content']).rsplit('. ', 1)[0] + '. ' + keylist[random.randint(1,len(keylist))] + ' #' + hashtag, 'image': item['visual']['url'], 'id': item['id']})
             #MARK ARTICLES AS READ SO WON'T BE SCRAPED ON NEXT RUN:
             #requests.post('{}'.format(markers_url), data=json.dumps({"action": "markAsRead", "type": "entries", "entryIds": ["{}".format(item['id'])]}), headers = headers)
     return export_list
