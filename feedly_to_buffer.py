@@ -3,7 +3,7 @@ import json
 import re
 import random
 
-#Construct Key phrases from text file (assumes in same folder as .py file):
+#Construct Key phrases from text file (assumes keyphrase.txt file in same folder as .py file and has separate key-phrases on separate lines of the text document):
 key_phrases = open('keyphrase.txt')
 keylist = [i.strip() for i in key_phrases.readlines()]
 
